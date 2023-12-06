@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<LIBRARYMANAGEMENTSYSTEM_MITRASOContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LIBRARYMANAGEMENTSYSTEM_MITRASOContext") ?? throw new InvalidOperationException("Connection string 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
