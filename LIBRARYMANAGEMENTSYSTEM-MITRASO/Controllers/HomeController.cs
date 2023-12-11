@@ -1,9 +1,15 @@
 ﻿using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,9 +24,10 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> LogOut()
         {
-            return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("LoginView", "Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

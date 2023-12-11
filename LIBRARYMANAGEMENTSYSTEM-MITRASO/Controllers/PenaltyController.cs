@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
+    [Authorize]
     public class PenaltyController : Controller
     {
         private readonly LIBRARYMANAGEMENTSYSTEM_MITRASOContext _context;

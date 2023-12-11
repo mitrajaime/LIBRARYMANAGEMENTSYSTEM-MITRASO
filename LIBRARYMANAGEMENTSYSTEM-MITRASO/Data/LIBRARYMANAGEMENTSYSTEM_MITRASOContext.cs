@@ -19,5 +19,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Data
         public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Penalty>? Penalty { get; set; }
 
         public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Books>? Books { get; set; }
+
+        public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Borrower>? Borrower { get; set; }
     }
 }

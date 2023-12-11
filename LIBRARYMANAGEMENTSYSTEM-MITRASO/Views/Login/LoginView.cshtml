@@ -1,22 +1,24 @@
 ﻿@model LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.User
 @{
     ViewData["Title"] = "Login";
-    Layout = "LoginLayout";
+    Layout = "_AuthLayout";
 }
 <h1>Login</h1>
 <hr />
-<div class="col-md-4">
+<div class="col-md-8">
     <form method="post" asp-action="Login">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3 form-group">
-                <label class="control-label">Username</label>
-                <input type="text" class="form-control" asp-for="Username" asp-validation-for="Username">
+            <div class="form-floating mb-3">
+                
+                <input type="text" class="form-control" id="floatingInput" asp-for="Username" placeholder="Username" asp-validation-for="Username">
+                <label for="floatingInput">Username</label>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
-            <div class="mb-3 form-group">
-                <label class="control-label">Password</label>
-                <input type="password" class="form-control" asp-for="Password" asp-validation-for="Password">
+            <div class="mb-3 form-floating">
+                
+                <input type="password" class="form-control" id="floatingInput" asp-for="Password" placeholder="Password" asp-validation-for="Password">
+                <label for="floatingPassword">Password</label>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="mb-3 form-group">
