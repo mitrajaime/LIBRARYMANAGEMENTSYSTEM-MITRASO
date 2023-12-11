@@ -7,7 +7,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         [Key]
         public int UserId { get; set; }
         [Required]
-        [Display(Name = "First name")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; } = string.Empty;
         [Required]
         [Display(Name = "Last Name")]
