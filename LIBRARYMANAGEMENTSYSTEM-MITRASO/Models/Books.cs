@@ -19,6 +19,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         public int BookCategoryId { get; set; }
         [ForeignKey("BookCategoryId")]
         public BookCategory? BookCategory { get; set; }
-
+        [Required]
+        public bool IsBorrowed { get; set; }
     }
 }

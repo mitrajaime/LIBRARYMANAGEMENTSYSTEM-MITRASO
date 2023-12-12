@@ -16,6 +16,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         public string Username { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
-
+        
+        public bool StayLoggedIn { get; set; }
     }
 }

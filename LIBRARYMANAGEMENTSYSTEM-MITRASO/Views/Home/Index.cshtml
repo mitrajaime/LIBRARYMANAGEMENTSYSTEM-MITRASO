@@ -1,4 +1,6 @@
-﻿@{
+﻿
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +8,40 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@* <div class="container">
+    <h2>It is Books</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Books.BookId</th>
+            <th>Books.Title</th>
+            <th>Books.Author</th>
+            <th>Books.DatePublished</th>
+            <th>Books.BookCategoryId</th>
+            <th>Books.IsBorrowed</th>
+        </tr>
+        <tr>
+            <th>@Model.Books.BookId</th>
+            <th>@Model.Books.Title</th>
+            <th>@Model.Books.Author</th>
+            <th>@Model.Books.DatePublished</th>
+            <th>@Model.Books.BookCategoryId</th>
+            <th>@Model.Books.IsBorrowed</th>
+        </tr>
+    </table>
+
+    <h2>It is BookCategory</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>BookCategory.BookCategoryId</th>
+            <th>BookCategory.BookCategoryName</th>
+        </tr>
+        @foreach (var item in Model.BookCategory)
+        {
+            <tr>
+                <th>@item.BookCategoryId</th>
+                <th>@item.BookCategoryName</th>
+            </tr>
+        }
+    </table>
+</div> *@

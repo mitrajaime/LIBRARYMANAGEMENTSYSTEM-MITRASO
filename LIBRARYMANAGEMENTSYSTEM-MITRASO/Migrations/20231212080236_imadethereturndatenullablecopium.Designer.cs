@@ -4,6 +4,7 @@ using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 {
     [DbContext(typeof(LIBRARYMANAGEMENTSYSTEM_MITRASOContext))]
-    partial class LIBRARYMANAGEMENTSYSTEM_MITRASOContextModelSnapshot : ModelSnapshot
+    [Migration("20231212080236_imadethereturndatenullablecopium")]
+    partial class imadethereturndatenullablecopium
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

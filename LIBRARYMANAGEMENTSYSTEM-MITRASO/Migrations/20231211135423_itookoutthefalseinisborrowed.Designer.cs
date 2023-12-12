@@ -4,6 +4,7 @@ using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 {
     [DbContext(typeof(LIBRARYMANAGEMENTSYSTEM_MITRASOContext))]
-    partial class LIBRARYMANAGEMENTSYSTEM_MITRASOContextModelSnapshot : ModelSnapshot
+    [Migration("20231211135423_itookoutthefalseinisborrowed")]
+    partial class itookoutthefalseinisborrowed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,8 +153,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     b.Property<int>("BorrowingRecordsId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReturnDate")
-                        .IsRequired()
+                    b.Property<DateTime>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("BorrowingRecordsDetailsId");
@@ -214,9 +215,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("StayLoggedIn")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Username")
                         .IsRequired()

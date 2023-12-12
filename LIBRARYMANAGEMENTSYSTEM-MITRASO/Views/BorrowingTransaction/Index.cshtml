@@ -1,0 +1,62 @@
+﻿@model LIBRARYMANAGEMENTSYSTEM_MITRASO.ViewModels.BorrowingTransactionVM
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">CREATE TRANSACTION</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date Borrowed
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Borrower First Name
+            </th>
+            <th>
+                Borrower Last Name
+            </th>
+            <th>
+                Librarian First Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BorrowingRecordsData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateBorrowed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Borrower.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Borrower.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.LastName)
+                </td>
+                @* <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.BookId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a> |
+                </td> *@
+            </tr>
+        }
+    </tbody>
+</table>

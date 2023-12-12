@@ -9,10 +9,10 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         public int BorrowingRecordsId {  get; set; }
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime DateBorrowed { get; set; }
+        public DateTime DateBorrowed { get; set; } //DateTime.Now
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate { get; set; } //DateTime.Now.AddDays(7)
         [Required]
         [Display(Name = "Borrower")]
         public int BorrowerId { get; set; }

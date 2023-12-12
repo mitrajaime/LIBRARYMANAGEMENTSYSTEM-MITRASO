@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,96 +7,92 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
-using Microsoft.AspNetCore.Authorization;
+
+
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
-    [Authorize]
-    public class BooksController : Controller
+    public class BookCategoryController : Controller
     {
         private readonly LIBRARYMANAGEMENTSYSTEM_MITRASOContext _context;
 
-        public BooksController(LIBRARYMANAGEMENTSYSTEM_MITRASOContext context)
+        public BookCategoryController(LIBRARYMANAGEMENTSYSTEM_MITRASOContext context)
         {
             _context = context;
         }
 
-        // GET: Books
+        // GET: BookCategory
         public async Task<IActionResult> Index()
         {
-            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Books.Include(b => b.BookCategory);
-            return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
+              return _context.BookCategory != null ? 
+                          View(await _context.BookCategory.ToListAsync()) :
+                          Problem("Entity set 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext.BookCategory'  is null.");
         }
 
-
-        // GET: Books/Details/5
+        // GET: BookCategory/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || _context.BookCategory == null)
             {
                 return NotFound();
             }
 
-            var books = await _context.Books
-                .Include(b => b.BookCategory)
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (books == null)
+            var bookCategory = await _context.BookCategory
+                .FirstOrDefaultAsync(m => m.BookCategoryId == id);
+            if (bookCategory == null)
             {
                 return NotFound();
             }
 
-            return View(books);
+            return View(bookCategory);
         }
 
-        // GET: Books/Create
+        // GET: BookCategory/Create
         public IActionResult Create()
         {
-            ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName");
             return View();
         }
 
-        // POST: Books/Create
+        // POST: BookCategory/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Title,Author,DatePublished,BookCategoryId")] Books books)
+        public async Task<IActionResult> Create([Bind("BookCategoryId,BookCategoryName")] BookCategory bookCategory)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(books);
+                _context.Add(bookCategory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName", books.BookCategoryId);
-            return View(books);
+            return View(bookCategory);
         }
 
-        // GET: Books/Edit/5
+        // GET: BookCategory/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || _context.BookCategory == null)
             {
                 return NotFound();
             }
 
-            var books = await _context.Books.FindAsync(id);
-            if (books == null)
+            var bookCategory = await _context.BookCategory.FindAsync(id);
+            if (bookCategory == null)
             {
                 return NotFound();
             }
-            ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName", books.BookCategoryId);
-            return View(books);
+            return View(bookCategory);
         }
 
-        // POST: Books/Edit/5
+        // POST: BookCategory/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,Author,DatePublished,BookCategoryId,IsBorrowed")] Books books)
+        public async Task<IActionResult> Edit(int id, [Bind("BookCategoryId,BookCategoryName")] BookCategory bookCategory)
         {
-            if (id != books.BookId)
+            if (id != bookCategory.BookCategoryId)
             {
                 return NotFound();
             }
@@ -105,12 +101,12 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             {
                 try
                 {
-                    _context.Update(books);
+                    _context.Update(bookCategory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BooksExists(books.BookId))
+                    if (!BookCategoryExists(bookCategory.BookCategoryId))
                     {
                         return NotFound();
                     }
@@ -121,51 +117,49 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName", books.BookCategoryId);
-            return View(books);
+            return View(bookCategory);
         }
 
-        // GET: Books/Delete/5
+        // GET: BookCategory/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Books == null)
+            if (id == null || _context.BookCategory == null)
             {
                 return NotFound();
             }
 
-            var books = await _context.Books
-                .Include(b => b.BookCategory)
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (books == null)
+            var bookCategory = await _context.BookCategory
+                .FirstOrDefaultAsync(m => m.BookCategoryId == id);
+            if (bookCategory == null)
             {
                 return NotFound();
             }
 
-            return View(books);
+            return View(bookCategory);
         }
 
-        // POST: Books/Delete/5
+        // POST: BookCategory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Books == null)
+            if (_context.BookCategory == null)
             {
-                return Problem("Entity set 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext.Books'  is null.");
+                return Problem("Entity set 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext.BookCategory'  is null.");
             }
-            var books = await _context.Books.FindAsync(id);
-            if (books != null)
+            var bookCategory = await _context.BookCategory.FindAsync(id);
+            if (bookCategory != null)
             {
-                _context.Books.Remove(books);
+                _context.BookCategory.Remove(bookCategory);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BooksExists(int id)
+        private bool BookCategoryExists(int id)
         {
-          return (_context.Books?.Any(e => e.BookId == id)).GetValueOrDefault();
+          return (_context.BookCategory?.Any(e => e.BookCategoryId == id)).GetValueOrDefault();
         }
     }
 }

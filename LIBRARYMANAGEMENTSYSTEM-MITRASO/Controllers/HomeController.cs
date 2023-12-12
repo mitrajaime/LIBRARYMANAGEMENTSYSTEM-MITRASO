@@ -1,10 +1,11 @@
-﻿using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-
+using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using LIBRARYMANAGEMENTSYSTEM_MITRASO.ViewModels;
 
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
@@ -19,8 +20,27 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            //PracticeVM pvm = new()
+            //{
+            //    /*Books = new()
+            //    {
+            //        BookId = 20,
+            //        Title = "Test",
+            //        Author = "Test",
+            //        DatePublished = DateTime.Now,
+            //        BookCategoryId = 10,
+            //        IsBorrowed = false
+            //    },*/
+
+            //    //BookCategory = new()
+            //    //{
+            //    //    new BookCategory  
+            //    //    { BookCategoryId = 10, BookCategoryName = "Skibidi"}
+            //    //}
+            //};
+
             return View();
         }
 

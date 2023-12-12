@@ -21,6 +21,15 @@
                 <label for="floatingPassword">Password</label>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
+            <div class="mb-3 form-group">
+                <label>
+                    <input type="checkbox" asp-for="StayLoggedIn" />
+                    Stay Logged In.
+                </label>
+                
+            </div>
+            
             <div class="mb-3 form-group">
                 <button class="btn btn-outline-success">Submit</button>
             </div>

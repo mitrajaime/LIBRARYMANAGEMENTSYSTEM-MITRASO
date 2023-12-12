@@ -52,7 +52,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 AuthenticationProperties properties = new AuthenticationProperties()
                 {
                     AllowRefresh = true,
-                    IsPersistent = false
+                    IsPersistent = user.StayLoggedIn
                 };
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
