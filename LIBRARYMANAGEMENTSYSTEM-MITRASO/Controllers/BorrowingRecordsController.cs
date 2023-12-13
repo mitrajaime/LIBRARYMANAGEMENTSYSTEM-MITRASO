@@ -22,7 +22,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: BorrowingRecords
         public async Task<IActionResult> Index()
         {
-            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.BorrowingRecords.Include(b => b.Borrower).Include(b => b.User);
+            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.BorrowingRecords.Include(b => b.Borrower).Include(b => b.User).Include(b => b.Books);
             return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
         }
 
@@ -37,6 +37,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             var borrowingRecords = await _context.BorrowingRecords
                 .Include(b => b.Borrower)
                 .Include(b => b.User)
+                .Include(b => b.Books)
                 .FirstOrDefaultAsync(m => m.BorrowingRecordsId == id);
             if (borrowingRecords == null)
             {
@@ -49,8 +50,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: BorrowingRecords/Create
         public IActionResult Create()
         {
-            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "CourseId");
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName");
+            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo");
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username");
+            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
             return View();
         }
 
@@ -59,7 +61,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BorrowingRecordsId,DateBorrowed,DueDate,BorrowerId,UserId")] BorrowingRecords borrowingRecords)
+        public async Task<IActionResult> Create([Bind("BorrowingRecordsId,DateBorrowed,DueDate,BorrowerId,UserId,BookId")] BorrowingRecords borrowingRecords)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +69,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "CourseId", borrowingRecords.BorrowerId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName", borrowingRecords.UserId);
+            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
+            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
             return View(borrowingRecords);
         }
 
@@ -85,8 +88,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             {
                 return NotFound();
             }
-            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "CourseId", borrowingRecords.BorrowerId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName", borrowingRecords.UserId);
+            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
+            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
             return View(borrowingRecords);
         }
 
@@ -95,7 +99,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BorrowingRecordsId,DateBorrowed,DueDate,BorrowerId,UserId")] BorrowingRecords borrowingRecords)
+        public async Task<IActionResult> Edit(int id, [Bind("BorrowingRecordsId,DateBorrowed,DueDate,BorrowerId,UserId,BookId")] BorrowingRecords borrowingRecords)
         {
             if (id != borrowingRecords.BorrowingRecordsId)
             {
@@ -122,8 +126,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "CourseId", borrowingRecords.BorrowerId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName", borrowingRecords.UserId);
+            ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
+            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
             return View(borrowingRecords);
         }
 
@@ -138,6 +143,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             var borrowingRecords = await _context.BorrowingRecords
                 .Include(b => b.Borrower)
                 .Include(b => b.User)
+                .Include(b => b.Books)
                 .FirstOrDefaultAsync(m => m.BorrowingRecordsId == id);
             if (borrowingRecords == null)
             {

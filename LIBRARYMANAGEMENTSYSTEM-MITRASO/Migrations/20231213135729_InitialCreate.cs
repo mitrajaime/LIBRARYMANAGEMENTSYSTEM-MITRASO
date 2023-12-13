@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 {
-    public partial class AddMigrationInitialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -49,7 +49,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StayLoggedIn = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,7 +66,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DatePublished = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BookCategoryId = table.Column<int>(type: "int", nullable: false)
+                    BookCategoryId = table.Column<int>(type: "int", nullable: false),
+                    IsBorrowed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,12 +88,20 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateBorrowed = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BookId = table.Column<int>(type: "int", nullable: false),
                     BorrowerId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BorrowingRecords", x => x.BorrowingRecordsId);
+                    table.ForeignKey(
+                        name: "FK_BorrowingRecords_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BorrowingRecords_Borrower_BorrowerId",
                         column: x => x.BorrowerId,
@@ -107,26 +117,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BorrowingRecordsDetails",
-                columns: table => new
-                {
-                    BorrowingRecordsDetailsId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BorrowingRecordsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BorrowingRecordsDetails", x => x.BorrowingRecordsDetailsId);
-                    table.ForeignKey(
-                        name: "FK_BorrowingRecordsDetails_BorrowingRecords_BorrowingRecordsId",
-                        column: x => x.BorrowingRecordsId,
-                        principalTable: "BorrowingRecords",
-                        principalColumn: "BorrowingRecordsId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Penalty",
                 columns: table => new
                 {
@@ -136,23 +126,29 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     Amount = table.Column<int>(type: "int", nullable: false),
                     PenaltyDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsSettled = table.Column<bool>(type: "bit", nullable: false),
-                    BorrowingRecordsDetailsId = table.Column<int>(type: "int", nullable: false)
+                    BorrowingRecordsId = table.Column<int>(type: "int", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: true),
+                    HasPenalty = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Penalty", x => x.PenaltyId);
                     table.ForeignKey(
-                        name: "FK_Penalty_BorrowingRecordsDetails_BorrowingRecordsDetailsId",
-                        column: x => x.BorrowingRecordsDetailsId,
-                        principalTable: "BorrowingRecordsDetails",
-                        principalColumn: "BorrowingRecordsDetailsId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Penalty_BorrowingRecords_BookId",
+                        column: x => x.BookId,
+                        principalTable: "BorrowingRecords",
+                        principalColumn: "BorrowingRecordsId");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_BookCategoryId",
                 table: "Books",
                 column: "BookCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BorrowingRecords_BookId",
+                table: "BorrowingRecords",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BorrowingRecords_BorrowerId",
@@ -165,38 +161,30 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BorrowingRecordsDetails_BorrowingRecordsId",
-                table: "BorrowingRecordsDetails",
-                column: "BorrowingRecordsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Penalty_BorrowingRecordsDetailsId",
+                name: "IX_Penalty_BookId",
                 table: "Penalty",
-                column: "BorrowingRecordsDetailsId");
+                column: "BookId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
-
-            migrationBuilder.DropTable(
                 name: "Penalty");
 
             migrationBuilder.DropTable(
-                name: "BookCategory");
-
-            migrationBuilder.DropTable(
-                name: "BorrowingRecordsDetails");
-
-            migrationBuilder.DropTable(
                 name: "BorrowingRecords");
+
+            migrationBuilder.DropTable(
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Borrower");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "BookCategory");
         }
     }
 }

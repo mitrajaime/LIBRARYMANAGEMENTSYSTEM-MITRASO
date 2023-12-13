@@ -1,28 +1,32 @@
 ﻿@model IEnumerable<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Borrowing Records";
 }
 
-<h1>Index</h1>
+<h1>Borrowing Records</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-success" asp-action="Create">Create New</a>
+    
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateBorrowed)
+                Date Borrowed
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DueDate)
+                Due Date
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Borrower)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                Book
             </th>
             <th></th>
         </tr>
@@ -37,11 +41,14 @@
                 @Html.DisplayFor(modelItem => item.DueDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Borrower.Course)
+                @Html.DisplayFor(modelItem => item.Borrower.FirstName)
+                @Html.DisplayFor(modelItem => item.Borrower.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.User.FirstName)
+                @Html.DisplayFor(modelItem => item.User.LastName)
             </td>
+                @Html.DisplayFor(modelItem => item.Books.Title)
             <td>
                 <a asp-action="Edit" asp-route-id="@item.BorrowingRecordsId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.BorrowingRecordsId">Details</a> |

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
 using Microsoft.AspNetCore.Authorization;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
@@ -20,6 +21,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         {
             _context = context;
         }
+       
 
         // GET: Books
         public async Task<IActionResult> Index()
@@ -33,11 +35,121 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Books;
             List<Books> borrowedBooks = await _context.Books.Include(b => b.BookCategory).Where(books => books.IsBorrowed == true).ToListAsync();
 
+
             return View(borrowedBooks);
             //return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
-
-
         }
+        // GET: Books/Edit/5
+        public async Task<IActionResult> Return(int? id)
+        {
+            if (id == null || _context.Books == null)
+            {
+                return NotFound();
+            }
+
+            var books = await _context.Books.FindAsync(id);
+            if (books == null)
+            {
+                return NotFound();
+            }
+            ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName", books.BookCategoryId);
+            return View(books);
+        }
+
+        [HttpPost]  
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Return(int id, [Bind("BookId,Title,Author,DatePublished,BookCategoryId,IsBorrowed")] Books books)
+        {
+            if (id != books.BookId)
+            {
+                return NotFound();
+            }
+            
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    books.IsBorrowed = false;
+                    _context.Update(books);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BooksExists(books.BookId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+               // return RedirectToAction(nameof(Index));
+            }
+           
+           // return View(books);
+            return RedirectToAction(nameof(Index));
+            /*var bookToReturn = await _context.Books
+                .Include(b => b.BookCategory)
+                .FirstOrDefaultAsync(m => m.BookId == id);
+            var returnDateData = await _context.BorrowingRecordsDetails
+                .Include(a => a.BookId)
+                .FirstOrDefaultAsync(m => m.BookId == id);
+
+             if (bookToReturn != null && bookToReturn.IsBorrowed == true)
+             {
+                 bookToReturn.IsBorrowed = false;
+                
+
+                 _context.Update(bookToReturn);
+                 await _context.SaveChangesAsync();
+                 return RedirectToAction(nameof(Borrowed));
+             }
+             else if(bookToReturn == null)
+             {
+                 return NotFound();
+             }
+             return RedirectToAction(nameof(Index)); ;*/
+        }
+        //public async Task<IActionResult> ConfirmReturn(int? id)
+        //{
+        //    if (id == null || _context.Books == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var books = await _context.Books
+        //        .Include(b => b.BookCategory)
+        //        .FirstOrDefaultAsync(m => m.BookId == id);
+        //    if (books == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(books);
+        //}
+
+        //public async Task<IActionResult> Returned()
+        //{
+        //    //var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Books;
+        //    ////var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.BorrowingRecordsDetails;
+        //    ////List <Books> returnedBooks = await _context.Books.Include(b => b.BookCategory).Where(books => !books.IsBorrowed && books.ReturnDate != null).ToListAsync();
+        //    //return View(returnedBooks);
+
+        //    //List<Books> books = await _context.Books.Include(books => books.BookCategory).ToListAsync();
+        //    List<BorrowingRecordsDetails> borrowingRecordsDetails = await _context.BorrowingRecordsDetails.Include(borrowingRecordsDetails => borrowingRecordsDetails.BookId).ToListAsync();
+        //    return View(returnedBooks);
+
+        //    //List<Books> = returnedBooks(
+        //    //    from Books in books
+        //    //    join )
+
+        //}
+
+        //public async Task<IActionResult> Returned()
+        //{
+        //    var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.
+        //}
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -62,6 +174,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         public IActionResult Create()
         {
             ViewData["BookCategoryId"] = new SelectList(_context.Set<BookCategory>(), "BookCategoryId", "BookCategoryName");
+
+            
+
             return View();
         }
 

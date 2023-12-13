@@ -23,7 +23,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Data
         public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Borrower>? Borrower { get; set; }
 
         public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords>? BorrowingRecords { get; set; }
-        public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecordsDetails>? BorrowingRecordsDetails { get; set; }
+        
 
         public DbSet<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BookCategory>? BookCategory { get; set; }
     }

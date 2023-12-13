@@ -1,0 +1,36 @@
+﻿@model LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Books
+
+@{
+    ViewData["Title"] = "Details"; 
+}
+
+<h1>Return</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Return">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BookId" />
+            <input type="hidden" asp-for="Title" class="form-control" />
+            <input type="hidden" asp-for="Author" class="form-control" />
+            <input type="hidden" asp-for="DatePublished" class="form-control" />
+            <input type="hidden" asp-for="BookCategoryId" class="form-control" asp-items="ViewBag.BookCategoryId" />
+            <input type="hidden" class="form-check-input" asp-for="IsBorrowed" />
+            <div class="form-group">
+                <input type="submit" value="Confirm?" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

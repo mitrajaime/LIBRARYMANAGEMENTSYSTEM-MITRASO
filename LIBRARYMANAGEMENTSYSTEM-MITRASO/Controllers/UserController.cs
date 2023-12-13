@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
 using Microsoft.AspNetCore.Authorization;
+using LIBRARYMANAGEMENTSYSTEM_MITRASO.Services;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
@@ -62,6 +63,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         {
             if (ModelState.IsValid)
             {
+                string HashPassword = HashingService.HashData(user.Password);
+                user.Password = HashPassword;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

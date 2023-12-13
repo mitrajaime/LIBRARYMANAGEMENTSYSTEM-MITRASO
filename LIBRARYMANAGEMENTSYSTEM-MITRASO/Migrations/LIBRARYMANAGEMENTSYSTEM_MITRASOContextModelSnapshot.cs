@@ -79,7 +79,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowerId"), 1L, 1);
 
-                    b.Property<string>("CourseId")
+                    b.Property<string>("Course")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -116,6 +116,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowingRecordsId"), 1L, 1);
 
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BorrowerId")
                         .HasColumnType("int");
 
@@ -125,43 +128,21 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("BorrowingRecordsId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("BorrowerId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("BorrowingRecords");
-                });
-
-            modelBuilder.Entity("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecordsDetails", b =>
-                {
-                    b.Property<int>("BorrowingRecordsDetailsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowingRecordsDetailsId"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BorrowingRecordsId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ReturnDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("BorrowingRecordsDetailsId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("BorrowingRecordsId");
-
-                    b.ToTable("BorrowingRecordsDetails");
                 });
 
             modelBuilder.Entity("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Penalty", b =>
@@ -175,8 +156,14 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("BorrowingRecordsDetailsId")
+                    b.Property<int?>("BookId")
                         .HasColumnType("int");
+
+                    b.Property<int>("BorrowingRecordsId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HasPenalty")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSettled")
                         .HasColumnType("bit");
@@ -190,7 +177,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     b.HasKey("PenaltyId");
 
-                    b.HasIndex("BorrowingRecordsDetailsId");
+                    b.HasIndex("BookId");
 
                     b.ToTable("Penalty");
                 });
@@ -240,6 +227,12 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
             modelBuilder.Entity("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords", b =>
                 {
+                    b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Books", "Books")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Borrower", "Borrower")
                         .WithMany()
                         .HasForeignKey("BorrowerId")
@@ -252,39 +245,20 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Books");
+
                     b.Navigation("Borrower");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecordsDetails", b =>
-                {
-                    b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Books", "Books")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords", "BorrowingRecords")
-                        .WithMany()
-                        .HasForeignKey("BorrowingRecordsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Books");
-
-                    b.Navigation("BorrowingRecords");
-                });
-
             modelBuilder.Entity("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Penalty", b =>
                 {
-                    b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecordsDetails", "BorrowingRecordsDetails")
+                    b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords", "BorrowingRecords")
                         .WithMany()
-                        .HasForeignKey("BorrowingRecordsDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookId");
 
-                    b.Navigation("BorrowingRecordsDetails");
+                    b.Navigation("BorrowingRecords");
                 });
 #pragma warning restore 612, 618
         }

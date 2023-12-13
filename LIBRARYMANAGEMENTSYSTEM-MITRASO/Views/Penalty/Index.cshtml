@@ -25,7 +25,10 @@
                 @Html.DisplayNameFor(model => model.IsSettled)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BorrowingRecordsDetails)
+                @Html.DisplayNameFor(model => model.BorrowingRecordsId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasPenalty)
             </th>
             <th></th>
         </tr>
@@ -46,7 +49,10 @@
                 @Html.DisplayFor(modelItem => item.IsSettled)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BorrowingRecordsDetails.BorrowingRecordsDetailsId)
+                @Html.DisplayFor(modelItem => item.BorrowingRecordsId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasPenalty)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PenaltyId">Edit</a> |

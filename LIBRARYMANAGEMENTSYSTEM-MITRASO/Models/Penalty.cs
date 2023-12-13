@@ -17,9 +17,15 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         public DateTime PenaltyDate { get; set; }
         [Required]
         public bool IsSettled { get; set; }
+
+        [Display(Name = "Borrowing Record")]
         [Required]
-        public int BorrowingRecordsDetailsId { get; set; }
-        [ForeignKey("BorrowingRecordsDetailsId")]
-        public BorrowingRecordsDetails? BorrowingRecordsDetails { get; set; }
+        public int BorrowingRecordsId { get; set; }
+
+        [ForeignKey("BookId")]
+        public BorrowingRecords? BorrowingRecords { get; set; }
+
+        [Required]
+        public bool HasPenalty { get; set; }
     }
 }

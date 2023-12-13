@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Data;
 using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
-    [Authorize]
     public class PenaltyController : Controller
     {
         private readonly LIBRARYMANAGEMENTSYSTEM_MITRASOContext _context;
@@ -24,8 +22,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: Penalty
         public async Task<IActionResult> Index()
         {
-            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Penalty.Include(p => p.BorrowingRecordsDetails);
-            return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
+              return _context.Penalty != null ? 
+                          View(await _context.Penalty.ToListAsync()) :
+                          Problem("Entity set 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext.Penalty'  is null.");
         }
 
         // GET: Penalty/Details/5
@@ -37,7 +36,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
 
             var penalty = await _context.Penalty
-                .Include(p => p.BorrowingRecordsDetails)
                 .FirstOrDefaultAsync(m => m.PenaltyId == id);
             if (penalty == null)
             {
@@ -50,7 +48,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: Penalty/Create
         public IActionResult Create()
         {
-            ViewData["BorrowingRecordsDetailsId"] = new SelectList(_context.Set<BorrowingRecordsDetails>(), "BorrowingRecordsDetailsId", "BorrowingRecordsDetailsId");
             return View();
         }
 
@@ -59,7 +56,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsDetailsId")] Penalty penalty)
+        public async Task<IActionResult> Create([Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId,HasPenalty")] Penalty penalty)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +64,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BorrowingRecordsDetailsId"] = new SelectList(_context.Set<BorrowingRecordsDetails>(), "BorrowingRecordsDetailsId", "BorrowingRecordsDetailsId", penalty.BorrowingRecordsDetailsId);
             return View(penalty);
         }
 
@@ -84,7 +80,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             {
                 return NotFound();
             }
-            ViewData["BorrowingRecordsDetailsId"] = new SelectList(_context.Set<BorrowingRecordsDetails>(), "BorrowingRecordsDetailsId", "BorrowingRecordsDetailsId", penalty.BorrowingRecordsDetailsId);
             return View(penalty);
         }
 
@@ -93,7 +88,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsDetailsId")] Penalty penalty)
+        public async Task<IActionResult> Edit(int id, [Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId,HasPenalty")] Penalty penalty)
         {
             if (id != penalty.PenaltyId)
             {
@@ -120,7 +115,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BorrowingRecordsDetailsId"] = new SelectList(_context.Set<BorrowingRecordsDetails>(), "BorrowingRecordsDetailsId", "BorrowingRecordsDetailsId", penalty.BorrowingRecordsDetailsId);
             return View(penalty);
         }
 
@@ -133,7 +127,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
 
             var penalty = await _context.Penalty
-                .Include(p => p.BorrowingRecordsDetails)
                 .FirstOrDefaultAsync(m => m.PenaltyId == id);
             if (penalty == null)
             {
