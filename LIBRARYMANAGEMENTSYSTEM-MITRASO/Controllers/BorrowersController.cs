@@ -58,7 +58,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BorrowerId,FirstName,LastName,StudentIdNo,Course,Phone,Email")] Borrower borrower)
+        public async Task<IActionResult> Create([Bind("BorrowerId,FirstName,LastName,StudentIdNo,CourseId,Phone,Email")] Borrower borrower)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BorrowerId,FirstName,LastName,StudentIdNo,Course,Phone,Email")] Borrower borrower)
+        public async Task<IActionResult> Edit(int id, [Bind("BorrowerId,FirstName,LastName,StudentIdNo,CourseId,Phone,Email")] Borrower borrower)
         {
             if (id != borrower.BorrowerId)
             {

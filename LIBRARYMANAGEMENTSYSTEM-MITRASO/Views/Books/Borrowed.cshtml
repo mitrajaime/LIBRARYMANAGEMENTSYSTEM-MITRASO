@@ -1,0 +1,60 @@
+﻿@model IEnumerable<LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.Books>
+
+@{
+    ViewData["Title"] = "Borrowed Books";
+}
+
+<h1>Borrowed Books</h1>
+
+<p>
+    <a class="btn btn-outline-success" asp-action="Index">Go Back</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DatePublished)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsBorrowed)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DatePublished)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookCategory.BookCategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsBorrowed)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.BookId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BookId">Delete</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

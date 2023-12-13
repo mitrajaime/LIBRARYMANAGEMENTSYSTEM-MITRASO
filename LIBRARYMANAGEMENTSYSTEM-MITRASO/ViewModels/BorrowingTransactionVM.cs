@@ -8,5 +8,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.ViewModels
         public List<BorrowingRecordsDetails> BorrowingRecordsDetailsData { get; set; }
         public List<Borrower> BorrowerData { get; set; }
         public List<Books> BooksData { get; set; }
+        
     }
 }

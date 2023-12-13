@@ -78,7 +78,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BorrowerId"), 1L, 1);
 
-                    b.Property<string>("Course")
+                    b.Property<string>("CourseId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

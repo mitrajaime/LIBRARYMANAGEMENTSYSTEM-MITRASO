@@ -28,6 +28,16 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
         }
 
+        public async Task<IActionResult> Borrowed()
+        {
+            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Books;
+            List<Books> borrowedBooks = await _context.Books.Include(b => b.BookCategory).Where(books => books.IsBorrowed == true).ToListAsync();
+
+            return View(borrowedBooks);
+            //return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
+
+
+        }
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
