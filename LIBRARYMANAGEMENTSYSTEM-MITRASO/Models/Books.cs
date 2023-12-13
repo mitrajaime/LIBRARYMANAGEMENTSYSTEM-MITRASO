@@ -21,5 +21,6 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         public BookCategory? BookCategory { get; set; }
         [Required]
         public bool IsBorrowed { get; set; }
+        
     }
 }
