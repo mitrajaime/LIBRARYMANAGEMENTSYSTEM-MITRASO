@@ -22,10 +22,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
         [Required]
         public int BorrowingRecordsId { get; set; }
 
-        [ForeignKey("BookId")]
+        [ForeignKey("BorrowingRecordsId")]
         public BorrowingRecords? BorrowingRecords { get; set; }
 
-        [Required]
-        public bool HasPenalty { get; set; }
     }
 }

@@ -41,7 +41,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
             else
             {
-                //HttpContext.Session.SetString("Username", loginUser.Username);
+                HttpContext.Session.SetString("FirstName", loginUser.FirstName);
+                HttpContext.Session.SetString("LastName", loginUser.LastName);
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Username),

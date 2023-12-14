@@ -8,6 +8,14 @@ builder.Services.AddDbContext<LIBRARYMANAGEMENTSYSTEM_MITRASOContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LIBRARYMANAGEMENTSYSTEM_MITRASOContext") ?? throw new InvalidOperationException("Connection string 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext' not found.")));
 
 // Add services to the container.
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".LIBRARYMANAGEMENTSYSTEM_MITRASO.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthentication(
@@ -32,6 +40,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 

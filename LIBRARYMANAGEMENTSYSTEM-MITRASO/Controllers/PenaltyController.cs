@@ -22,9 +22,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: Penalty
         public async Task<IActionResult> Index()
         {
-              return _context.Penalty != null ? 
-                          View(await _context.Penalty.ToListAsync()) :
-                          Problem("Entity set 'LIBRARYMANAGEMENTSYSTEM_MITRASOContext.Penalty'  is null.");
+            var lIBRARYMANAGEMENTSYSTEM_MITRASOContext = _context.Penalty.Include(p => p.BorrowingRecords);
+            return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
         }
 
         // GET: Penalty/Details/5
@@ -36,6 +35,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
 
             var penalty = await _context.Penalty
+                .Include(p => p.BorrowingRecords)
                 .FirstOrDefaultAsync(m => m.PenaltyId == id);
             if (penalty == null)
             {
@@ -48,6 +48,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: Penalty/Create
         public IActionResult Create()
         {
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId");
             return View();
         }
 
@@ -56,14 +57,72 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId,HasPenalty")] Penalty penalty)
+        public async Task<IActionResult> Create([Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId")] Penalty penalty)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(penalty);
+                var borrowingRecords = await _context.BorrowingRecords.FindAsync(penalty.BorrowingRecordsId);
+                borrowingRecords.HasPenalty = true; // fix this
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
+            return View(penalty);
+        }
+
+        //Settle
+        
+        public async Task<IActionResult> Settle(int? id)
+        {
+            if (id == null || _context.Penalty == null)
+            {
+                return NotFound();
+            }
+
+            var penalty = await _context.Penalty.FindAsync(id);
+            if (penalty == null)
+            {
+                return NotFound();
+            }
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
+            return View(penalty);
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settle(int id, [Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId")] Penalty penalty)
+        {
+            if (id != penalty.PenaltyId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var borrowingRecords = await _context.BorrowingRecords.FindAsync(penalty.BorrowingRecordsId);
+                    borrowingRecords.HasPenalty = false;
+                    penalty.IsSettled = true;
+                    await _context.SaveChangesAsync();
+                    
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PenaltyExists(penalty.PenaltyId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
             return View(penalty);
         }
 
@@ -80,6 +139,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             {
                 return NotFound();
             }
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
             return View(penalty);
         }
 
@@ -88,7 +148,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId,HasPenalty")] Penalty penalty)
+        public async Task<IActionResult> Edit(int id, [Bind("PenaltyId,PenaltyName,Amount,PenaltyDate,IsSettled,BorrowingRecordsId")] Penalty penalty)
         {
             if (id != penalty.PenaltyId)
             {
@@ -115,6 +175,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
             return View(penalty);
         }
 
@@ -127,6 +188,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
 
             var penalty = await _context.Penalty
+                .Include(p => p.BorrowingRecords)
                 .FirstOrDefaultAsync(m => m.PenaltyId == id);
             if (penalty == null)
             {

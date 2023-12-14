@@ -10,6 +10,7 @@ using LIBRARYMANAGEMENTSYSTEM_MITRASO.Models;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 {
+
     public class BorrowingRecordsController : Controller
     {
         private readonly LIBRARYMANAGEMENTSYSTEM_MITRASOContext _context;
@@ -52,7 +53,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         {
             ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo");
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username");
-            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
+            ViewData["BookId"] = new SelectList(_context.Books.Where(b => b.IsBorrowed == false), "BookId", "Title");
             return View();
         }
 
@@ -66,12 +67,14 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(borrowingRecords);
+                var book = await _context.Books.FindAsync(borrowingRecords.BookId);
+                book.IsBorrowed = true;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
-            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
+            ViewData["BookId"] = new SelectList(_context.Books.Where(b => b.IsBorrowed == false), "BookId", "Title", borrowingRecords.BookId);
             return View(borrowingRecords);
         }
 
@@ -90,7 +93,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
             ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
-            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
+            ViewData["BookId"] = new SelectList(_context.Books.Where(b => b.IsBorrowed == false), "BookId", "Title", borrowingRecords.BookId);
             return View(borrowingRecords);
         }
 
@@ -128,7 +131,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             }
             ViewData["BorrowerId"] = new SelectList(_context.Borrower, "BorrowerId", "StudentIdNo", borrowingRecords.BorrowerId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "Username", borrowingRecords.UserId);
-            ViewData["Books"] = new SelectList(_context.User, "BookId", "Title");
+            ViewData["BookId"] = new SelectList(_context.Books.Where(b => b.IsBorrowed == false), "BookId", "Title", borrowingRecords.BookId);
             return View(borrowingRecords);
         }
 

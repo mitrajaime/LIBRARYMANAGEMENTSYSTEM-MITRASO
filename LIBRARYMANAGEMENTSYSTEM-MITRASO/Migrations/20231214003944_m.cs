@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class m : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,9 +30,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentIdNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Course = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentIdNo = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Course = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -91,7 +91,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BookId = table.Column<int>(type: "int", nullable: false),
                     BorrowerId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    HasPenalty = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,18 +127,17 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     Amount = table.Column<int>(type: "int", nullable: false),
                     PenaltyDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsSettled = table.Column<bool>(type: "bit", nullable: false),
-                    BorrowingRecordsId = table.Column<int>(type: "int", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: true),
-                    HasPenalty = table.Column<bool>(type: "bit", nullable: false)
+                    BorrowingRecordsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Penalty", x => x.PenaltyId);
                     table.ForeignKey(
-                        name: "FK_Penalty_BorrowingRecords_BookId",
-                        column: x => x.BookId,
+                        name: "FK_Penalty_BorrowingRecords_BorrowingRecordsId",
+                        column: x => x.BorrowingRecordsId,
                         principalTable: "BorrowingRecords",
-                        principalColumn: "BorrowingRecordsId");
+                        principalColumn: "BorrowingRecordsId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -161,9 +161,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Penalty_BookId",
+                name: "IX_Penalty_BorrowingRecordsId",
                 table: "Penalty",
-                column: "BookId");
+                column: "BorrowingRecordsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

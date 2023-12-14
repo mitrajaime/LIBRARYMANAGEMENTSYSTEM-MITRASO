@@ -81,7 +81,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     b.Property<string>("Course")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -97,11 +98,13 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("StudentIdNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("BorrowerId");
 
@@ -127,6 +130,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasPenalty")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
@@ -156,14 +162,8 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
                     b.Property<int>("BorrowingRecordsId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("HasPenalty")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSettled")
                         .HasColumnType("bit");
@@ -177,7 +177,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
 
                     b.HasKey("PenaltyId");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex("BorrowingRecordsId");
 
                     b.ToTable("Penalty");
                 });
@@ -256,7 +256,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Migrations
                 {
                     b.HasOne("LIBRARYMANAGEMENTSYSTEM_MITRASO.Models.BorrowingRecords", "BorrowingRecords")
                         .WithMany()
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BorrowingRecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("BorrowingRecords");
                 });

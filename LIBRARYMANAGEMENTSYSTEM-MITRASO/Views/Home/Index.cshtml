@@ -1,14 +1,16 @@
-﻿
+﻿@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome @HttpContextAccessor.HttpContext.Session.GetString("FirstName") @HttpContextAccessor.HttpContext.Session.GetString("LastName")</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-<h1>hehe</h1>
+
+
+
 @* <div class="container">
     <h2>It is Books</h2>
     <table class="table table-bordered">

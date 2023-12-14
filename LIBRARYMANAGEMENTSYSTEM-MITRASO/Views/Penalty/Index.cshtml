@@ -25,10 +25,7 @@
                 @Html.DisplayNameFor(model => model.IsSettled)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BorrowingRecordsId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HasPenalty)
+                @Html.DisplayNameFor(model => model.BorrowingRecords)
             </th>
             <th></th>
         </tr>
@@ -49,15 +46,13 @@
                 @Html.DisplayFor(modelItem => item.IsSettled)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BorrowingRecordsId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HasPenalty)
+                @Html.DisplayFor(modelItem => item.BorrowingRecords.BorrowingRecordsId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PenaltyId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PenaltyId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PenaltyId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.PenaltyId">Delete</a> |
+                    <a asp-action="Settle" asp-route-id="@item.PenaltyId">Settle</a>
             </td>
         </tr>
 }
