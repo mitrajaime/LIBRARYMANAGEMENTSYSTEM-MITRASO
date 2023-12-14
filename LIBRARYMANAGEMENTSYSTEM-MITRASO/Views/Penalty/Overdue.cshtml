@@ -67,13 +67,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.HasPenalty)
                 </td>
-                
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.BorrowingRecordsId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.BorrowingRecordsId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.BorrowingRecordsId">Delete</a> |
-                    <a asp-action="Return" asp-route-id="@item.BorrowingRecordsId">Return (not done)</a>
-                </td>
             </tr>
         }
     </tbody>

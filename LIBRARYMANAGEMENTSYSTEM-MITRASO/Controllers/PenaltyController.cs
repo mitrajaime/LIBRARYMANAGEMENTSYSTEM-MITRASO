@@ -48,9 +48,9 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         // GET: Penalty/Create
         public async Task<IActionResult> Create()
         {
-            var borrowingRecords = _context.BorrowingRecords.Include(b => b.Borrower).Include(b => b.User).Include(b => b.Books).ToListAsync();
+            //var borrowingRecords = _context.BorrowingRecords.Include(b => b.Borrower).Include(b => b.User).Include(b => b.Books).ToListAsync();
             ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId");
-            return View(borrowingRecords);
+            return View();
         }
 
         // POST: Penalty/Create
@@ -77,7 +77,11 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
 
         public async Task<IActionResult> Overdue()
         {
-            var overdueRecords = await _context.BorrowingRecords.Where(records => records.ReturnDate > records.DueDate).ToListAsync();
+            var overdueRecords = await _context.BorrowingRecords
+                .Include(b => b.Borrower)
+                .Include(b => b.User)
+                .Include(b => b.Books)
+                .Where(records => records.ReturnDate > records.DueDate).ToListAsync();
 
 
             return View(overdueRecords);

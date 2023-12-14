@@ -14,7 +14,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Models
 
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime DueDate { get; set; } = DateTime.Now.AddDays(7);
+        public DateTime DueDate { get; set; } = DateTime.Now.AddDays(-7);
 
 
         [DataType(DataType.DateTime)]
