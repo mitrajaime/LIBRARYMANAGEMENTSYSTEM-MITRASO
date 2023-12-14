@@ -13,12 +13,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Date Borrowed
-            </th>
-            <th>
-                Due Date
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Borrower)
             </th>
@@ -31,18 +26,22 @@
             <th>
                 Has Penalty
             </th>
+            <th>
+                Date Borrowed
+            </th>
+            <th>
+                Due Date
+            </th>
+            <th>
+                Return Date
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateBorrowed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Borrower.FirstName)
                 @Html.DisplayFor(modelItem => item.Borrower.LastName)
@@ -58,10 +57,19 @@
                 @Html.DisplayFor(modelItem => item.HasPenalty)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DateBorrowed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.BorrowingRecordsId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.BorrowingRecordsId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.BorrowingRecordsId">Delete</a> |
-                <a asp-action="Return" asp-route-id="@item.BorrowingRecordsId">Return (not done)</a>
+                <a asp-action="Return" asp-route-id="@item.BorrowingRecordsId">Return</a>
             </td>
         </tr>
 }

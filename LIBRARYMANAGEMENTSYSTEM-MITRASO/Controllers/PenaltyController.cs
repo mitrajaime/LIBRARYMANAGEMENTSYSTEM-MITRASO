@@ -46,10 +46,11 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
         }
 
         // GET: Penalty/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var borrowingRecords = _context.BorrowingRecords.Include(b => b.Borrower).Include(b => b.User).Include(b => b.Books).ToListAsync();
             ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId");
-            return View();
+            return View(borrowingRecords);
         }
 
         // POST: Penalty/Create
@@ -63,16 +64,29 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
             {
                 _context.Add(penalty);
                 var borrowingRecords = await _context.BorrowingRecords.FindAsync(penalty.BorrowingRecordsId);
-                borrowingRecords.HasPenalty = true; // fix this
+                borrowingRecords.HasPenalty = true;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords, "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
+
+            ViewData["BorrowingRecordsId"] = new SelectList(_context.BorrowingRecords.Where(b => b.HasPenalty == false), "BorrowingRecordsId", "BorrowingRecordsId", penalty.BorrowingRecordsId);
             return View(penalty);
         }
 
+        //
+
+        public async Task<IActionResult> Overdue()
+        {
+            var overdueRecords = await _context.BorrowingRecords.Where(records => records.ReturnDate > records.DueDate).ToListAsync();
+
+
+            return View(overdueRecords);
+            //return View(await lIBRARYMANAGEMENTSYSTEM_MITRASOContext.ToListAsync());
+        }
+
+
         //Settle
-        
+
         public async Task<IActionResult> Settle(int? id)
         {
             if (id == null || _context.Penalty == null)
@@ -106,6 +120,7 @@ namespace LIBRARYMANAGEMENTSYSTEM_MITRASO.Controllers
                     var borrowingRecords = await _context.BorrowingRecords.FindAsync(penalty.BorrowingRecordsId);
                     borrowingRecords.HasPenalty = false;
                     penalty.IsSettled = true;
+                    _context.Update(penalty);
                     await _context.SaveChangesAsync();
                     
                 }
